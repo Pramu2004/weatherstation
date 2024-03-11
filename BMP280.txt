@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Sensor Data </title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body> 
+<h1 style="color:white;font-size:300%;font-family:verdana;">Weather Forecast</h1>
+</style>
+  </div>
+</div>
+
+<body background="mosi-knife--PVgDgKXgZA-unsplash.jpg">
+  <div id="temperatureChart" style="width: 600px; height: 400px;"></div>
+  
+  <div id="humidityChart" style="width: 600px; height: 400px;"></div>
+
+  <div id="pressureChart" style="width: 600px; height: 400px;"></div>
+
+  <script>
+    var temperatureChart, humidityChart, pressureChart;
+    var temperatureData = [], humidityData = [], pressureData = [];
+
+    function connectWebSocket() {
+      var socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+      socket.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        temperatureData.push([Date.now(), data.temperature]);
+        humidityData.push([Date.now(), data.humidity]);
+        pressureData.push([Date.now(), data.pressure]);
+
+        updateCharts();
+      };
+    }
+
+    function updateCharts() {
+      temperatureChart.series[0].setData(temperatureData);
+      humidityChart.series[0].setData(humidityData);
+      pressureChart.series[0].setData(pressureData);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create Temperature Chart
+      temperatureChart = Highcharts.chart('temperatureChart', {
+        title: { text: 'Temperature' },
+        xAxis: { type: 'datetime' },
+        yAxis: { title: { text: 'Temperature (°C)' } },
+        series: [{ name: 'Temperature', data: [] }]
+      });
+
+      // Create Humidity Chart
+      humidityChart = Highcharts.chart('humidityChart', {
+        title: { text: 'Humidity' },
+        xAxis: { type: 'datetime' },
+        yAxis: { title: { text: 'Humidity (%)' } },
+        series: [{ name: 'Humidity', data: [] }]
+      });
+
+      // Create Pressure Chart
+      pressureChart = Highcharts.chart('pressureChart', {
+        title: { text: 'Pressure' },
+        xAxis: { type: 'datetime' },
+        yAxis: { title: { text: 'Pressure (hPa)' } },
+        series: [{ name: 'Pressure', data: [] }]
+      });
+
+      // Connect to WebSocket
+      connectWebSocket();
+    });
+  </script>
+<div class="transparent-box">
+  <div class="content">
+  <h3>Weekly Forecast</h3>
+    <style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 6px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  img {
+    max-width: 30px;
+    max-height: 30px;
+  }
+</style>
+</head>
+<body>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Weather</th>
+      <th>Temperature</th>
+      <th>Humidity</th>
+      <th>Wind</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Monday</td>
+      <td><img src="pngwing.com.png" alt="Sunny"> Sunny</td>
+      <td>25°C</td>
+      <td>50%</td>
+      <td>10 km/h</td>
+    </tr>
+    <tr>
+      <td>Tuesday</td>
+      <td><img src="pngwing.com (1).png" alt="Cloudy"> Cloudy</td>
+      <td>22°C</td>
+      <td>60%</td>
+      <td>15 km/h</td>
+    </tr>
+    <tr>
+      <td>Wednesday</td>
+      <td><img src="pngwing3.com.png" alt="Rainy"> Rainy</td>
+      <td>18°C</td>
+      <td>70%</td>
+      <td>20 km/h</td>
+    </tr>
+        <tr>
+      <td>Thursday</td>
+      <td><img src="pngwing3.com.png" alt="Rainy"> Rainy</td>
+      <td>18°C</td>
+      <td>70%</td>
+      <td>20 km/h</td>
+    </tr>
+    <tr>
+      <td>Friday</td>
+      <td><img src="pngwing3.com.png" alt="Rainy"> Rainy</td>
+      <td>18°C</td>
+      <td>70%</td>
+      <td>20 km/h</td>
+    </tr>
+    <tr>
+      <td>Saturday</td>
+      <td><img src="pngwing3.com.png" alt="Rainy"> Rainy</td>
+      <td>18°C</td>
+      <td>70%</td>
+      <td>20 km/h</td>
+    </tr>
+    <tr>
+      <td>Sunday</td>
+      <td><img src="pngwing3.com.png" alt="Rainy"> Rainy</td>
+      <td>18°C</td>
+      <td>70%</td>
+      <td>20 km/h</td>
+    </tr>
+  </tbody>
+</table>
+<style>
+  .transparent-box {
+    width: 800px;
+    height: 450px;
+    background-color: rgba(255, 255, 255, 0.5); /* Adjust the last value (0.5) to control transparency */
+    border-radius: 20px; /* Adjust this value to control the curvature of the edges */
+    position: relative;
+    left: 45%;
+    transform: translate(0%, -267%);
+    overflow: hidden;
+  }
+
+  .content {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-48%, -60%);
+    color: black; /* Change text color */
+    text-align: center;
+  }
+
+
+</body>
+</html>
